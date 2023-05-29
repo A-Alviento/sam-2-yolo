@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Image Coordinate Getter</title>
+        <style>
+            #imageContainer {
+                position: relative;
+            }
+            #myImage {
+                max-width: 100%;
+            }
+            .dot {
+                height: 10px;
+                width: 10px;
+                background-color: #ff0000;
+                border-radius: 50%;
+                display: inline-block;
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <input type="file" id="imageUploader" accept="image/*">
+        <div id="imageContainer"></div>
+        <div id="coordinates"></div>
+
+        <script>
+            var imageUploader = document.getElementById('imageUploader');
+            var imageContainer = document.getElementById('imageContainer');
+            var coordinatesDiv = document.getElementById('coordinates');
+
+            imageUploader.onchange = function(e) {
+                var img = new Image();
+                img.id = "myImage";
+                img.onload = function() {
+                    imageContainer.innerHTML = '';
+                    imageContainer.appendChild(img);
+                    imageContainer.onclick = function(e) {
+                        var x = e.offsetX;
+                        var y = e.offsetY;
+                        var dot = document.createElement("span");
+                        dot.className = "dot";
+                        dot.style.left = x + 'px';
+                        dot.style.top = y + 'px';
+                        imageContainer.appendChild(dot);
+                        coordinatesDiv.innerHTML += 'X: ' + x + ', Y: ' + y + '<br>';
+                    }
+                }
+                img.src = URL.createObjectURL(e.target.files[0]);
+            };
+        </script>
+    </body>
+</html>
