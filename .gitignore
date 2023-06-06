@@ -2,4 +2,11 @@ sam_vit_b_01ec64.pth
 .DS_Store
 yolov8l.pt
 yolov8n.pt
+yolov8l-seg.pt
 sam_vit_h_4b8939.pth
+dataset/
+add_images/
+add-dataset/
+add-videos/
+images/
+videos/
