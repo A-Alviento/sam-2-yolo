@@ -1,3 +1,29 @@
+# Import the necessary libraries
+import numpy as np 
+import torch
+import matplotlib.pyplot as plt
+from segment_anything import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
+import cv2
+from ultralytics import YOLO
+from PIL import Image
+import os
+import shutil
+from sklearn.model_selection import train_test_split
+from IPython.display import display
+from IPython.display import clear_output
+import yaml
+from ultralytics import YOLO
+import glob
+import pickle
+
+from sam2yolo_functions import *
+
+from jupyter_bbox_widget import BBoxWidget
+import ipywidgets as widgets
+import os
+import json
+import base64
+
 # used to display the segment, without the background
 def display_mask_img(mask_img, h, w):
     display(mask_img.resize((w,h)))
@@ -17,11 +43,45 @@ def load_images(path):
     
     return images
 
+###
+
+import numpy as np
+from scipy import ndimage
+
+def process_mask(mask):
+    # Identify each separate region in the mask.
+    labeled_mask, num_labels = ndimage.label(mask)
+    
+    # Count the size of each region.
+    region_sizes = np.bincount(labeled_mask.flatten())
+    
+    # The first region (index 0) is the background, which we don't want to consider.
+    region_sizes[0] = 0
+    
+    # Find the largest region.
+    largest_region = np.argmax(region_sizes)
+    
+    # Create a mask that only includes the largest region.
+    largest_mask = (labeled_mask == largest_region)
+    
+    # Fill in the holes in this region.
+    filled_mask = ndimage.morphology.binary_fill_holes(largest_mask)
+    
+    return filled_mask
+
+
+
+
+###
+
 
 # extract the coordinates of the segment from SAM and store them in a list
 def extract_segment(mask):
     binary_mask = np.array(mask) # get the segmentation of the mask and convert it to a numpy array
     binary_mask = (binary_mask * 255).astype(np.uint8) # convert the mask to a binary mask
+
+    binary_mask = (process_mask(binary_mask) * 255).astype(np.uint8)
+
 
     contours, hierarchy = cv2.findContours(binary_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) # find contours from the binary image
     polygon_coords = [] # stores the coordinates of the vertices of the polygon
