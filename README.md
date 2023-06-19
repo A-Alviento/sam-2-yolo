@@ -1,6 +1,6 @@
 # Sam2Yolo-Tool
-**NOTE: This branch is specifically for apple silicon. This branch is specifically tested and run using Python 3.8 on a Macbook Air using M1 apple silicon**
-This project leverages the capabilities of the Segment Anything Model (SAM) to automate the process of creating segmentation datasets for YOLOv8.
+- **NOTE: This branch is specifically for apple silicon. This branch is specifically tested and run using Python 3.8 on a Macbook Air using M1 apple silicon**
+- This project leverages the capabilities of the Segment Anything Model (SAM) to automate the process of creating segmentation datasets for YOLOv8.
 
 ## Description
 
